@@ -213,30 +213,32 @@ public final class DNASequenceAnalyzer {
         double[] c = new double[max];
         double[] t = new double[max];
         double[] g = new double[max];
-        double[] xdata = new double[max];
+        double[] position = new double[max];
         
         for (int i = 0; i < max; i++) {
-            xdata[i] = i + 1;
+            position[i] = i + 1;
         }
             
         for (int pos = 0; pos < max; pos++) {
             for (int seq = 0, n = dna.size(); seq < n; seq++) {
+                if (pos < dna.get(seq).length()) {
                 char cc = dna.get(seq).charAt(pos);
-                if (cc == 'a' || cc == 'A')
-                    a[pos]++;
-                if (cc == 'c' || cc == 'C')
-                    c[pos]++;
-                if (cc == 't' || cc == 'T')
-                    t[pos]++;
-                if (cc == 'g' || cc == 'G')
-                    g[pos]++;
+                    if (cc == 'a' || cc == 'A')
+                        a[pos]++;
+                    if (cc == 'c' || cc == 'C')
+                        c[pos]++;
+                    if (cc == 't' || cc == 'T')
+                        t[pos]++;
+                    if (cc == 'g' || cc == 'G')
+                        g[pos]++;
+                }
             }
         }
             
-        chart.addSeries("Adenine", xdata, a);
-        chart.addSeries("Cytosine", xdata, c);
-        chart.addSeries("Thymine", xdata, t);
-        chart.addSeries("Guanine", xdata, g);
+        chart.addSeries("Adenine", position, a);
+        chart.addSeries("Cytosine", position, c);
+        chart.addSeries("Thymine", position, t);
+        chart.addSeries("Guanine", position, g);
         
         
         ChartFrame cf = new ChartFrame(chart);
