@@ -6,9 +6,11 @@
 package lab2;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.UIManager;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
 
 /**
  *
@@ -61,11 +63,10 @@ public class HydrophobicityScale {
     /**
      * @param sni index of scale to be used
      * @param sw sliding window length
-     * @param fastaInput FASTA input from text area
+     * @param sequence the sequence
      * @return hydrophobicity scale
      */
-    public double[] getHydrophobicity(int sni, int sw, String fastaInput) {
-        String sequence = fastaInput;
+    public double[] getHydrophobicity(int sni, int sw, String sequence) {
         double[] hydrophobicity = new double[sequence.length()];
         //double.length - windowLength + 1
         for (int i = sw/2; i <= hydrophobicity.length - sw + 1; i++) {
@@ -76,7 +77,137 @@ public class HydrophobicityScale {
         }
         return hydrophobicity;
     }
+
+    public void generatePlot(int sni, int sw, double threshold, ArrayList<String> fastaInput) {
+        if (fastaInput.size() == 1) {
+            String sequence = fastaInput.get(0);
+            XYChart chart = new XYChartBuilder().width(300).height(200).
+                title("Hydrophobicity Plot").xAxisTitle("Index position").
+                yAxisTitle("Average Hydrophobicity").build();
+            
+            
+            double[] indexPosition = new double[sequence.length()];
+            for (int i = 0; i < indexPosition.length; i++) {
+                indexPosition[i] = i + 1;
+            }
+            
+            double[] thresholdValue = new double[indexPosition.length];
+            for (int i = 0; i < thresholdValue.length; i++) {
+                thresholdValue[i] = threshold;
+            }
+            
+            double[] avgHydrophobicity = this.getHydrophobicity(
+                    sni, sw, sequence);
+            
+            chart.addSeries("Sequence", indexPosition, avgHydrophobicity);
+            chart.addSeries("Threshold", indexPosition, thresholdValue);
+            
+            ChartPanel cp = new ChartPanel(chart);
+            ArrayList<ChartPanel> cplist = new ArrayList<ChartPanel>();
+            cplist.add(cp);
+            ChartGenerator cg = new ChartGenerator(cplist);
+        } else {
+            ArrayList<ChartPanel> cplist = new ArrayList<ChartPanel>();
+            
+            for (int i = 1; i < fastaInput.size(); i+=2) {
+                String sequence = fastaInput.get(i);
+                
+                XYChart chart = new XYChartBuilder().width(300).height(200).
+                    title("Hydrophobicity plot for " + 
+                            fastaInput.get(i - 1).substring(1)).
+                        xAxisTitle("Index position").
+                        yAxisTitle("Average Hydrophobicity").build();
+                
+                double[] indexPosition = new double[sequence.length()];
+                for (int k = 0; k < indexPosition.length; k++) {
+                    indexPosition[k] = k + 1;
+                }
+                
+                double[] thresholdValue = new double[indexPosition.length];
+                for (int j=  0; j < thresholdValue.length; j++) {
+                    thresholdValue[j] = threshold;
+                }
+            
+                double[] avgHydrophobicity = this.getHydrophobicity(
+                        sni, sw, sequence);
+                
+                chart.addSeries(fastaInput.get(i - 1).substring(1) + "", 
+                        indexPosition, avgHydrophobicity);
+                chart.addSeries("Threshold", indexPosition, thresholdValue);
+                cplist.add(new ChartPanel(chart));
+            }
+            ChartGenerator cg = new ChartGenerator(cplist);
+        }
+    }
     
+    
+  /*
+    String[] textAreaValue = s.split("\n");
+        String output = "";
+        String input = "";
+        ArrayList<String> dna =  new ArrayList<String>();
+        
+        for (int i = 0, n = textAreaValue.length; i < n; i++) {
+            if (textAreaValue[i].startsWith(">")) {
+                if (!input.equals("")) {
+                    // output += this.analyzer.translateToProtein(input) + "\r\n";
+                    dna.add(input);
+                    input = "";
+                }
+                output += textAreaValue[i] + "_PROTEIN_EQUIVALENT\r\n";
+            }  else {
+                    input += textAreaValue[i];
+            }
+        }
+        if (!input.equals("")) {
+            // output += this.analyzer.translateToProtein(input) + "\r\n";
+            dna.add(input);
+            input = "";
+        }
+        
+        
+        
+        XYChart chart = new XYChartBuilder().width(400).height(300).
+                title("Nucleotide Trend").xAxisTitle("Position").
+                yAxisTitle("Count").build();
+        
+        
+        int max = this.max(dna);
+        
+        double[] a = new double[max];
+        double[] c = new double[max];
+        double[] t = new double[max];
+        double[] g = new double[max];
+        double[] position = new double[max];
+        
+        for (int i = 0; i < max; i++) {
+            position[i] = i + 1;
+        }
+            
+        for (int pos = 0; pos < max; pos++) {
+            for (int seq = 0, n = dna.size(); seq < n; seq++) {
+                if (pos < dna.get(seq).length()) {
+                char cc = dna.get(seq).charAt(pos);
+                    if (cc == 'a' || cc == 'A')
+                        a[pos]++;
+                    if (cc == 'c' || cc == 'C')
+                        c[pos]++;
+                    if (cc == 't' || cc == 'T')
+                        t[pos]++;
+                    if (cc == 'g' || cc == 'G')
+                        g[pos]++;
+                }
+            }
+        }
+            
+        chart.addSeries("Adenine", position, a);
+        chart.addSeries("Cytosine", position, c);
+        chart.addSeries("Thymine", position, t);
+        chart.addSeries("Guanine", position, g);
+        
+        
+        ChartFrame cf = new ChartFrame(chart);
+    */
 
     /**
      * @return the file
