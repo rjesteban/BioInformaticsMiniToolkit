@@ -102,6 +102,7 @@
     <Component class="javax.swing.JButton" name="generatePlotButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Generate Plot"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generatePlotButtonActionPerformed"/>
@@ -122,26 +123,21 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="thresholdSlider" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="defaultSettingsButton" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="scaleComboBox" min="-2" max="-2" attributes="0"/>
-                                      <Component id="windowLengthComboBox" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="scaleComboBox" min="-2" max="-2" attributes="0"/>
+                              <Component id="windowLengthComboBox" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -209,7 +205,7 @@
         </Component>
         <Component class="javax.swing.JSlider" name="thresholdSlider">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Dictionary labelTable = new Dict();&#xa;thresholdSlider.setMinimum(5);&#xa;thresholdSlider.setMaximum(25);&#xa;thresholdSlider.setMajorTickSpacing(5);&#xa;labelTable.put(5, new JLabel(&quot;0.5&quot;));&#xa;labelTable.put(10, new JLabel(&quot;1.0&quot;));&#xa;labelTable.put(15, new JLabel(&quot;1.5&quot;));&#xa;labelTable.put(20, new JLabel(&quot;2.0&quot;));&#xa;labelTable.put(25, new JLabel(&quot;2.5&quot;));&#xa;thresholdSlider.setLabelTable(labelTable);&#xa;thresholdSlider.setPaintTicks(true);&#xa;thresholdSlider.setPaintLabels(true);&#xa;thresholdSlider.setSnapToTicks(true);&#xa;thresholdSlider.setValue(10);"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Dictionary labelTable = new Dict();&#xa;thresholdSlider.setMinimum(5);&#xa;thresholdSlider.setMaximum(25);&#xa;thresholdSlider.setMajorTickSpacing(5);&#xa;thresholdSlider.setMinorTickSpacing(1);&#xa;labelTable.put(5, new JLabel(&quot;0.5&quot;));&#xa;labelTable.put(10, new JLabel(&quot;1.0&quot;));&#xa;labelTable.put(15, new JLabel(&quot;1.5&quot;));&#xa;labelTable.put(20, new JLabel(&quot;2.0&quot;));&#xa;labelTable.put(25, new JLabel(&quot;2.5&quot;));&#xa;thresholdSlider.setLabelTable(labelTable);&#xa;thresholdSlider.setPaintTicks(true);&#xa;thresholdSlider.setPaintLabels(true);&#xa;thresholdSlider.setSnapToTicks(true);&#xa;thresholdSlider.setValue(10);"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="defaultSettingsButton">

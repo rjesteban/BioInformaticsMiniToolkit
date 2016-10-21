@@ -5,8 +5,9 @@
  */
 package lab2;
 
-import java.io.File;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -22,6 +23,7 @@ import javax.swing.JLabel;
  */
 public class AnsLab2JPanel extends javax.swing.JPanel {
     private HydrophobicityScale scale;
+    private ArrayList<String> sequences;
     
     
     /**
@@ -30,6 +32,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
     public AnsLab2JPanel() {
         scale = new HydrophobicityScale();
         initComponents();
+        addKeyListenerToTextArea();
     }
 
     /**
@@ -77,6 +80,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         });
 
         generatePlotButton.setText("Generate Plot");
+        generatePlotButton.setEnabled(false);
         generatePlotButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 generatePlotButtonActionPerformed(evt);
@@ -117,21 +121,18 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(thresholdSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(defaultSettingsButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(18, 18, 18))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(25, 25, 25)))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(scaleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(windowLengthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(25, 25, 25)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scaleComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(windowLengthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -158,6 +159,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         thresholdSlider.setMinimum(5);
         thresholdSlider.setMaximum(25);
         thresholdSlider.setMajorTickSpacing(5);
+        thresholdSlider.setMinorTickSpacing(1);
         labelTable.put(5, new JLabel("0.5"));
         labelTable.put(10, new JLabel("1.0"));
         labelTable.put(15, new JLabel("1.5"));
@@ -234,6 +236,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
 
     private void resetInputButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetInputButtonActionPerformed
         this.inputFastaArea.setText("");
+        this.checkInput();
     }//GEN-LAST:event_resetInputButtonActionPerformed
 
     private void defaultSettingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultSettingsButtonActionPerformed
@@ -243,10 +246,74 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_defaultSettingsButtonActionPerformed
 
     private void generatePlotButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlotButtonActionPerformed
-        // TODO add your handling code here:
-        
+        //sni, sw, arraylist
+        int sni = this.scaleComboBox.getSelectedIndex();
+        int sw = Integer.valueOf(String.valueOf(this.windowLengthComboBox.getSelectedItem()));
+        double threshold = this.thresholdSlider.getValue()/10.0;
+        this.scale.generatePlot(sni, sw, threshold, sequences);
     }//GEN-LAST:event_generatePlotButtonActionPerformed
 
+    
+    private void addKeyListenerToTextArea(){
+        inputFastaArea.addKeyListener(new java.awt.event.KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                checkInput();
+            }
+        });    
+    }
+    
+    private void checkInput() {
+        if (this.inputFastaArea.getText().isEmpty() || !this.loadFastaInput())
+            this.generatePlotButton.setEnabled(false);
+        else {
+            this.generatePlotButton.setEnabled(true);
+        }
+    
+    }
+    
+   
+    private boolean loadFastaInput () {
+        String[] text = this.inputFastaArea.getText().toUpperCase().split("\n");
+        ArrayList<String> fastaSequences = new ArrayList<String>();
+        
+        if (text[0].startsWith(">"))
+            fastaSequences.add(text[0]);
+        else if (text[0].startsWith("M"))
+            fastaSequences.add(text[0]);
+        else
+            return false;        
+        
+        for (int i = 1; i < text.length; i++) {
+            if (fastaSequences.get(fastaSequences.size() - 1).startsWith(">")) {
+                if (!text[i].startsWith("M") || text[i].startsWith(">"))
+                    return false;
+                else
+                    fastaSequences.add(text[i]);
+            } else {
+                int n = fastaSequences.size() - 1;
+                if (!text[i].startsWith(">"))
+                    fastaSequences.set(n, fastaSequences.get(n) + text[i]);
+                else
+                    fastaSequences.add(text[i]);
+            }
+        }
+        
+        if (fastaSequences.get(fastaSequences.size() - 1).startsWith(">")) {
+            return false;
+        }
+        System.out.println("fsss: " + fastaSequences.get(fastaSequences.size() - 1));
+        this.sequences = fastaSequences;
+        return true;
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton defaultSettingsButton;
