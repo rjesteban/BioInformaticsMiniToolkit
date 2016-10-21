@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author rl-008
+ * @author rjesteban
  */
 public class ChartGenerator {
     private ArrayList<ChartPanel> charts;
@@ -37,11 +37,9 @@ public class ChartGenerator {
         JPanel panel = new JPanel();
         panel.setSize(frame.getSize());
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//        panel.add(new JScrollBar(JScrollBar.VERTICAL));
         for (ChartPanel chart: charts) {
             panel.add(chart.getPanel());
         }
-//        frame.add(panel);
         JScrollPane scrollpane = new JScrollPane(panel);
         frame.add(scrollpane);
     }
