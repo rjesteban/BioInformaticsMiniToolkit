@@ -23,7 +23,7 @@ import org.knowm.xchart.XYChart;
 
 /**
  *
- * @author rl-008
+ * @author rjesteban
  */
 public class ChartPanel {
     private XYChart chart;
