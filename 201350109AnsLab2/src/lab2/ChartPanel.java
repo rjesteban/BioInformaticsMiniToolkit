@@ -40,9 +40,6 @@ public class ChartPanel {
         saveAsPng = new JButton();
         saveAsPng.setText("Save as JPEG/PNG");
         
-        // backButton = new JButton();
-        // backButton.setText("Back");
-        
         saveAsPng.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +55,6 @@ public class ChartPanel {
         this.panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         this.panel.add(new XChartPanel(chart));
         this.panel.add(saveAsPng);
-        // this.panel.add(backButton);
     }
     
     private void saveAsPngActionPerformed(java.awt.event.ActionEvent evt) throws IOException {                                           

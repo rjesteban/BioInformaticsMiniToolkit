@@ -7,6 +7,8 @@ package lab2;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -116,18 +118,15 @@ public class HydrophobicityScale {
                 chart.addSeries("Sequence", indices, avgHydrophobicity);
                 chart.addSeries("Threshold", indexPosition, thresholdValue);
 
-                     // add line
+                // add line
+                double max = this.getMax(avgHydrophobicity);
                 for (int j = 0, trendCount = 0; j < avgHydrophobicity.length - 3; j++) {
                     ArrayList<Double> trendX = new ArrayList<Double>();
-                    double max = Integer.MIN_VALUE;
                     int start = 0;
                     for (int k = j, c = 0; k < avgHydrophobicity.length; k++, c++) {
                         j = k;
                         if (avgHydrophobicity[j] > threshold) {
                             trendX.add(indices[j]);
-                            if (max < avgHydrophobicity[j]) {
-                                max = avgHydrophobicity[j];
-                            }
                         } else {
                             break;
                         }
@@ -185,17 +184,15 @@ public class HydrophobicityScale {
                             indices, avgHydrophobicity);
                     chart.addSeries("Threshold", indexPosition, thresholdValue);
                     // add line
+                    double max = this.getMax(avgHydrophobicity);
+                    
                     for (int j = 0, trendCount = 0; j < avgHydrophobicity.length - 3; j++) {
                         ArrayList<Double> trendX = new ArrayList<Double>();
-                        double max = Integer.MIN_VALUE;
                         int start = 0;
                         for (int k = j, c = 0; k < avgHydrophobicity.length; k++, c++) {
                             j = k;
                             if (avgHydrophobicity[j] > threshold) {
                                 trendX.add(indices[j]);
-                                if (max < avgHydrophobicity[j]) {
-                                    max = avgHydrophobicity[j];
-                                }
                             } else {
                                 break;
                             }
@@ -232,6 +229,15 @@ public class HydrophobicityScale {
         }
     }
 
+    private double getMax(double[] array) {
+        double max = Double.MIN_VALUE;
+        for (int i = 0; i < array.length; i++) {
+            if (max < array[i])
+                max = array[i];
+        }
+        return max;
+    }
+    
     /**
      * @return the file
      */
