@@ -138,7 +138,7 @@ public class HydrophobicityScale {
                         for (int k = 0; k < trendX.size(); k++) {
                             trendY.add(max + 0.5);
                         }
-                        chart.addSeries("Trend #" + trendCount++, trendX, trendY);
+                        chart.addSeries("Trend #" + ++trendCount, trendX, trendY);
                     }
                 }               
                 
@@ -206,7 +206,7 @@ public class HydrophobicityScale {
                             for (int k = 0; k < trendX.size(); k++) {
                                 trendY.add(max + 0.5);
                             }
-                            chart.addSeries("Trend #" + trendCount++, trendX, trendY);
+                            chart.addSeries("Trend #" + ++trendCount, trendX, trendY);
                         }
                     }
                     
