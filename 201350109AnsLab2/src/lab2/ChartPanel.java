@@ -29,7 +29,7 @@ public class ChartPanel {
     private XYChart chart;
     private JPanel panel;
     private JButton saveAsPng;
-    private JButton backButton;
+    // private JButton backButton;
     
     public ChartPanel(XYChart chart) {
         this.chart = chart;
@@ -40,8 +40,8 @@ public class ChartPanel {
         saveAsPng = new JButton();
         saveAsPng.setText("Save as JPEG/PNG");
         
-        backButton = new JButton();
-        backButton.setText("Back");
+        // backButton = new JButton();
+        // backButton.setText("Back");
         
         saveAsPng.addActionListener(new ActionListener() {
             @Override
@@ -58,7 +58,7 @@ public class ChartPanel {
         this.panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         this.panel.add(new XChartPanel(chart));
         this.panel.add(saveAsPng);
-        this.panel.add(backButton);
+        // this.panel.add(backButton);
     }
     
     private void saveAsPngActionPerformed(java.awt.event.ActionEvent evt) throws IOException {                                           

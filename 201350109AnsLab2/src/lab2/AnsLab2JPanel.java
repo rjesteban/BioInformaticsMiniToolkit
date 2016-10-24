@@ -58,6 +58,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         thresholdSlider = new javax.swing.JSlider();
         defaultSettingsButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
 
         uploadFastaButton.setText("Upload Fasta");
         uploadFastaButton.addActionListener(new java.awt.event.ActionListener() {
@@ -171,6 +172,14 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         thresholdSlider.setSnapToTicks(true);
         thresholdSlider.setValue(10);
 
+        quitButton.setBackground(new java.awt.Color(255, 0, 51));
+        quitButton.setText("QUIT");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,24 +187,32 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(generatePlotButton)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(generatePlotButton)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(uploadFastaButton)
-                                .addGap(63, 63, 63)
-                                .addComponent(resetInputButton)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(uploadFastaButton)
+                                        .addGap(63, 63, 63)
+                                        .addComponent(resetInputButton)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(quitButton)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(quitButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -253,6 +270,11 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         this.scale.generatePlot(sni, sw, threshold, sequences);
     }//GEN-LAST:event_generatePlotButtonActionPerformed
 
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_quitButtonActionPerformed
+
     
     private void addKeyListenerToTextArea(){
         inputFastaArea.addKeyListener(new java.awt.event.KeyListener() {
@@ -271,8 +293,9 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
     }
     
     private void checkInput() {
-        if (this.inputFastaArea.getText().isEmpty() || !this.loadFastaInput())
+        if (this.inputFastaArea.getText().isEmpty() || !this.loadFastaInput()) {
             this.generatePlotButton.setEnabled(false);
+        }
         else {
             this.generatePlotButton.setEnabled(true);
         }
@@ -309,7 +332,6 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         if (fastaSequences.get(fastaSequences.size() - 1).startsWith(">")) {
             return false;
         }
-        System.out.println("fsss: " + fastaSequences.get(fastaSequences.size() - 1));
         this.sequences = fastaSequences;
         return true;
     }
@@ -325,6 +347,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton quitButton;
     private javax.swing.JButton resetInputButton;
     private javax.swing.JComboBox scaleComboBox;
     private javax.swing.JSlider thresholdSlider;
