@@ -41,7 +41,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="lab2.AnsLab2JPanel" name="ansLab2JPanel1">
+    <Component class="lab3.AnsLab2JPanel" name="ansLab2JPanel1">
     </Component>
   </SubComponents>
 </Form>

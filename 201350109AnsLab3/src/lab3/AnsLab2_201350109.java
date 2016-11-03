@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lab2;
+package lab3;
 
 /**
  *
@@ -27,7 +27,7 @@ public class AnsLab2_201350109 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ansLab2JPanel1 = new lab2.AnsLab2JPanel();
+        ansLab2JPanel1 = new lab3.AnsLab2JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,6 +87,6 @@ public class AnsLab2_201350109 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private lab2.AnsLab2JPanel ansLab2JPanel1;
+    private lab3.AnsLab2JPanel ansLab2JPanel1;
     // End of variables declaration//GEN-END:variables
 }
