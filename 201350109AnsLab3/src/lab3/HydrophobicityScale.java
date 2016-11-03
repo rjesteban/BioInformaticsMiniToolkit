@@ -7,8 +7,7 @@ package lab3;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import org.knowm.xchart.style.markers.None;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -115,8 +114,8 @@ public class HydrophobicityScale {
                     indices[i] = j;
                 }
 
-                chart.addSeries("Sequence", indices, avgHydrophobicity);
-                chart.addSeries("Threshold", indexPosition, thresholdValue);
+                chart.addSeries("Sequence", indices, avgHydrophobicity).setMarker(new None());
+                chart.addSeries("Threshold", indexPosition, thresholdValue).setMarker(new None());
 
                 // add line
                 double max = this.getMax(avgHydrophobicity);
@@ -137,7 +136,7 @@ public class HydrophobicityScale {
                         for (int k = 0; k < trendX.size(); k++) {
                             trendY.add(max + 0.5);
                         }
-                        chart.addSeries("Trend #" + ++trendCount, trendX, trendY);
+                        chart.addSeries("Trend #" + ++trendCount, trendX, trendY).setMarker(new None());
                     }
                 }               
                 
@@ -181,8 +180,8 @@ public class HydrophobicityScale {
                     }
 
                     chart.addSeries(fastaInput.get(i - 1).substring(1) + "", 
-                            indices, avgHydrophobicity);
-                    chart.addSeries("Threshold", indexPosition, thresholdValue);
+                            indices, avgHydrophobicity).setMarker(new None());
+                    chart.addSeries("Threshold", indexPosition, thresholdValue).setMarker(new None());
                     // add line
                     double max = this.getMax(avgHydrophobicity);
                     
@@ -203,7 +202,7 @@ public class HydrophobicityScale {
                             for (int k = 0; k < trendX.size(); k++) {
                                 trendY.add(max + 0.5);
                             }
-                            chart.addSeries("Trend #" + ++trendCount, trendX, trendY);
+                            chart.addSeries("Trend #" + ++trendCount, trendX, trendY).setMarker(new None());
                         }
                     }
                     
