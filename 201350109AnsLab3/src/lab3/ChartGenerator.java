@@ -42,6 +42,7 @@ public class ChartGenerator {
         }
         JScrollPane scrollpane = new JScrollPane(panel);
         frame.add(scrollpane);
+        frame.pack();
     }
     
     

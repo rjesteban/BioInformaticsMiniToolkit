@@ -91,7 +91,7 @@ public class HydrophobicityScale {
                     throw new Exception();
                 }
                 
-                XYChart chart = new XYChartBuilder().width(300).height(200).
+                XYChart chart = new XYChartBuilder().width(500).height(700).
                     title("Hydrophobicity Plot").xAxisTitle("Index position").
                     yAxisTitle("Average Hydrophobicity").build();
 
@@ -155,7 +155,7 @@ public class HydrophobicityScale {
                         throw new Exception();
                     }
                     
-                    XYChart chart = new XYChartBuilder().width(300).height(200).
+                    XYChart chart = new XYChartBuilder().width(500).height(700).
                         title("Hydrophobicity plot for " + 
                                 fastaInput.get(i - 1).substring(1)).
                             xAxisTitle("Index position").
