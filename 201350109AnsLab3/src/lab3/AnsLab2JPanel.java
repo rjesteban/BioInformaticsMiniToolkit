@@ -5,6 +5,7 @@
  */
 package lab3;
 
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.event.DocumentEvent;
 
 /**
  *
@@ -290,6 +292,24 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
                 checkInput();
             }
         });    
+        
+        inputFastaArea.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkInput();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkInput();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkInput();
+            }
+        });
     }
     
     private void checkInput() {

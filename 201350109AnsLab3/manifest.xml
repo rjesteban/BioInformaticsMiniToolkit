@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>D:\college\FourthYearFirstSem\Cmsc 102\BioInformaticsMiniToolkit\201350109AnsLab3\dist\201350109AnsLab3.jar</jar>
-  <outfile>D:\college\FourthYearFirstSem\Cmsc 102\BioInformaticsMiniToolkit\201350109AnsLab3\201350109AnsLab3.exe</outfile>
+  <outfile>D:\college\FourthYearFirstSem\Cmsc 102\BioInformaticsMiniToolkit\201350109AnsLab3\dist\201350109AnsLab3.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
