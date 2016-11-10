@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.knowm.xchart.style.markers.None;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import org.knowm.xchart.XYChart;
 import org.knowm.xchart.XYChartBuilder;
 
@@ -81,151 +80,74 @@ public class HydrophobicityScale {
         return hydrophobicity;
     }
 
-    public void generatePlot(int sni, int sw, double threshold, ArrayList<String> fastaInput) {
-        boolean length = false;
-        try {
-            if (fastaInput.size() == 1) {
-                String sequence = fastaInput.get(0);
-                if (sw > sequence.length()) {
-                    length = true;
-                    throw new Exception();
+    public void generatePlot(int sni, int sw, double threshold, 
+            ArrayList<ProteinFastaSequence> fastaInput) {
+        ArrayList<ChartPanel> cplist = new ArrayList<>();
+
+        for (ProteinFastaSequence prot : fastaInput) {
+            if (sw > prot.sequence.length()) {
+                cplist.add(new ChartPanel(prot.comment + " output:"
+                        + " Sequence length < Sliding Window Length"));
+            } 
+            else if (!prot.isProtein()) {
+                cplist.add(new ChartPanel(prot.comment + " output:"
+                        + "Input is not protein"));
+            }
+            else if (prot.comment == null) {
+                cplist.add(new ChartPanel("output:"
+                        + "Input is not in FASTA FORMAT"));
+            }
+            else {
+                XYChart chart = new XYChartBuilder().width(700).height(700).
+                        title("Hydrophobicity plot for " + prot.comment).
+                        xAxisTitle("Index position").
+                        yAxisTitle("Average Hydrophobicity").
+                        build();
+                double[] indexPosition = new double[prot.sequence.length()];
+                for (int k = 0; k < indexPosition.length; k++) {
+                    indexPosition[k] = k + 1;
                 }
-                
-                XYChart chart = new XYChartBuilder().width(500).height(700).
-                    title("Hydrophobicity Plot").xAxisTitle("Index position").
-                    yAxisTitle("Average Hydrophobicity").build();
-
-
-                double[] indexPosition = new double[sequence.length() + 1];
-                for (int i = 0; i < indexPosition.length; i++) {
-                    indexPosition[i] = i;
-                }
-
                 double[] thresholdValue = new double[indexPosition.length];
-                for (int i = 0; i < thresholdValue.length; i++) {
-                    thresholdValue[i] = threshold;
+                for (int j=  0; j < thresholdValue.length; j++) {
+                    thresholdValue[j] = threshold;
                 }
-
                 double[] avgHydrophobicity = this.getHydrophobicity(
-                        sni, sw, sequence);
-
+                        sni, sw, prot.sequence);
                 double[] indices = new double[avgHydrophobicity.length];
-                for (int i = 0, j = (sw / 2) + 1; i < indices.length; i++, j++) {
-                    indices[i] = j;
+                for (int k = 0, j = (sw / 2) + 1; k < indices.length; k++, j++) {
+                    indices[k] = j;
                 }
-
-                chart.addSeries("Sequence", indices, avgHydrophobicity).setMarker(new None());
+                if (indices.length > 1) {
+                    chart.addSeries(prot.getID() + "", indices, avgHydrophobicity).setMarker(new None());
+                } else {
+                    chart.addSeries(prot.getID() + "", indices, avgHydrophobicity);
+                }
                 chart.addSeries("Threshold", indexPosition, thresholdValue).setMarker(new None());
-
                 // add line
                 double max = this.getMax(avgHydrophobicity);
                 for (int j = 0, trendCount = 0; j < avgHydrophobicity.length - 3; j++) {
-                    ArrayList<Double> trendX = new ArrayList<Double>();
-                    int start = 0;
+                    ArrayList<Double> trendX = new ArrayList<>();
                     for (int k = j, c = 0; k < avgHydrophobicity.length; k++, c++) {
                         j = k;
                         if (avgHydrophobicity[j] > threshold) {
                             trendX.add(indices[j]);
-                        } else {
+                        } else
                             break;
-                        }
-
                     }
                     if (trendX.size() >= sw) {
-                        ArrayList<Double> trendY = new ArrayList<Double>();
+                        ArrayList<Double> trendY = new ArrayList<>();
                         for (int k = 0; k < trendX.size(); k++) {
                             trendY.add(max + 0.5);
                         }
-                        chart.addSeries("Trend #" + ++trendCount, trendX, trendY).setMarker(new None());
+                        chart.addSeries("Trend #" + ++trendCount, 
+                                trendX, trendY).setMarker(new None());
                     }
-                }               
-                
-                
-                ChartPanel cp = new ChartPanel(chart);
-                ArrayList<ChartPanel> cplist = new ArrayList<ChartPanel>();
-                cplist.add(cp);
-                ChartGenerator cg = new ChartGenerator(cplist);
-            } else {
-                ArrayList<ChartPanel> cplist = new ArrayList<ChartPanel>();
-
-                for (int i = 1; i < fastaInput.size(); i+=2) {
-                    String sequence = fastaInput.get(i);
-                    if (sw > sequence.length()) {
-                        length = true;
-                        throw new Exception();
-                    }
-                    
-                    XYChart chart = new XYChartBuilder().width(500).height(700).
-                        title("Hydrophobicity plot for " + 
-                                fastaInput.get(i - 1).substring(1)).
-                            xAxisTitle("Index position").
-                            yAxisTitle("Average Hydrophobicity").build();
-
-                    double[] indexPosition = new double[sequence.length()];
-                    for (int k = 0; k < indexPosition.length; k++) {
-                        indexPosition[k] = k + 1;
-                    }
-
-                    double[] thresholdValue = new double[indexPosition.length];
-                    for (int j=  0; j < thresholdValue.length; j++) {
-                        thresholdValue[j] = threshold;
-                    }
-
-                    double[] avgHydrophobicity = this.getHydrophobicity(
-                            sni, sw, sequence);
-
-                    double[] indices = new double[avgHydrophobicity.length];
-                    for (int k = 0, j = (sw / 2) + 1; k < indices.length; k++, j++) {
-                        indices[k] = j;
-                    }
-
-                    chart.addSeries(fastaInput.get(i - 1).substring(1) + "", 
-                            indices, avgHydrophobicity).setMarker(new None());
-                    chart.addSeries("Threshold", indexPosition, thresholdValue).setMarker(new None());
-                    // add line
-                    double max = this.getMax(avgHydrophobicity);
-                    
-                    for (int j = 0, trendCount = 0; j < avgHydrophobicity.length - 3; j++) {
-                        ArrayList<Double> trendX = new ArrayList<Double>();
-                        int start = 0;
-                        for (int k = j, c = 0; k < avgHydrophobicity.length; k++, c++) {
-                            j = k;
-                            if (avgHydrophobicity[j] > threshold) {
-                                trendX.add(indices[j]);
-                            } else {
-                                break;
-                            }
-                                
-                        }
-                        if (trendX.size() >= sw) {
-                            ArrayList<Double> trendY = new ArrayList<Double>();
-                            for (int k = 0; k < trendX.size(); k++) {
-                                trendY.add(max + 0.5);
-                            }
-                            chart.addSeries("Trend #" + ++trendCount, trendX, trendY).setMarker(new None());
-                        }
-                    }
-                    
-                    
-                    cplist.add(new ChartPanel(chart));
                 }
-                ChartGenerator cg = new ChartGenerator(cplist);
+                cplist.add(new ChartPanel(chart));
             }
-        
-        } catch (Exception e) {
-            //custom title, error icon
-            if (length)
-                JOptionPane.showMessageDialog(null,
-                "Sliding Window size is not supposed to be greater than"
-                        + " the Protein Sequence Size",
-                "Sliding Window",
-                JOptionPane.ERROR_MESSAGE);
-            else
-                JOptionPane.showMessageDialog(null,
-                "Input is not protein",
-                "Input is not protein",
-                JOptionPane.ERROR_MESSAGE);
-        }
+        } // END FOR
+
+        ChartGenerator cg = new ChartGenerator(cplist);
     }
 
     private double getMax(double[] array) {
@@ -237,30 +159,18 @@ public class HydrophobicityScale {
         return max;
     }
     
-    /**
-     * @return the file
-     */
     public File getFile() {
         return file;
     }
 
-    /**
-     * @param file the file to set
-     */
     public void setFile(File file) {
         this.file = file;
     }
 
-    /**
-     * @return the scaleName
-     */
     public String[] getScaleName() {
         return scaleName;
     }
 
-    /**
-     * @param scaleName the scaleName to set
-     */
     public void setScaleName(String[] scaleName) {
         this.scaleName = scaleName;
     }

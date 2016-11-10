@@ -5,7 +5,6 @@
  */
 package lab3;
 
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -23,15 +22,15 @@ import javax.swing.event.DocumentEvent;
  *
  * @author rj
  */
-public class AnsLab2JPanel extends javax.swing.JPanel {
+public class AnsLab3JPanel extends javax.swing.JPanel {
     private HydrophobicityScale scale;
-    private ArrayList<String> sequences;
+    private ArrayList<ProteinFastaSequence> fastaSequences;
     
     
     /**
      * Creates new form AnsLab2JPanel
      */
-    public AnsLab2JPanel() {
+    public AnsLab3JPanel() {
         scale = new HydrophobicityScale();
         initComponents();
         addKeyListenerToTextArea();
@@ -269,7 +268,7 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
         int sni = this.scaleComboBox.getSelectedIndex();
         int sw = Integer.valueOf(String.valueOf(this.windowLengthComboBox.getSelectedItem()));
         double threshold = this.thresholdSlider.getValue()/10.0;
-        this.scale.generatePlot(sni, sw, threshold, sequences);
+        this.scale.generatePlot(sni, sw, threshold, this.fastaSequences);
     }//GEN-LAST:event_generatePlotButtonActionPerformed
 
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
@@ -313,46 +312,43 @@ public class AnsLab2JPanel extends javax.swing.JPanel {
     }
     
     private void checkInput() {
-        if (this.inputFastaArea.getText().isEmpty() || !this.loadFastaInput()) {
+        if (this.inputFastaArea.getText().isEmpty() || !this.isFastaInput())
             this.generatePlotButton.setEnabled(false);
-        }
-        else {
-            this.generatePlotButton.setEnabled(true);
-        }
-    
+        else this.generatePlotButton.setEnabled(true);
     }
     
-   
-    private boolean loadFastaInput () {
-        String[] text = this.inputFastaArea.getText().toUpperCase().split("\n");
-        ArrayList<String> fastaSequences = new ArrayList<String>();
+    private boolean isFastaInput () {
+        String[] text = this.inputFastaArea.getText().split("\n");
+        if (text.length <= 1 || !text[0].startsWith(">") || text[0].isEmpty())
+            return false;
+        if (text[text.length - 1].startsWith(">")) return false;
         
-        if (text[0].startsWith(">"))
-            fastaSequences.add(text[0]);
-        else if (text[0].startsWith("M"))
-            fastaSequences.add(text[0]);
-        else
-            return false;        
-        
-        for (int i = 1; i < text.length; i++) {
-            if (fastaSequences.get(fastaSequences.size() - 1).startsWith(">")) {
-                if (!text[i].startsWith("M") || text[i].startsWith(">"))
+        for (int i = 1; i < text.length; i++)
+            if ((text[i].startsWith(">") && text[i - 1].startsWith(">")) || 
+                (text[i - 1].startsWith(">") && text[i].isEmpty()))
                     return false;
-                else
-                    fastaSequences.add(text[i]);
-            } else {
-                int n = fastaSequences.size() - 1;
-                if (!text[i].startsWith(">"))
-                    fastaSequences.set(n, fastaSequences.get(n) + text[i]);
-                else
-                    fastaSequences.add(text[i]);
+        
+        this.fastaSequences = new ArrayList<>();
+        for (int i = 0; i < text.length; i++) {
+            if (text[i].startsWith(">")) {
+                String comment = text[i].substring(1);
+                String sequence = "";
+                for (int j = i + 1; j < text.length; j++, i = j) {
+                    if (text[j].startsWith(">") || text[j].isEmpty())
+                    { i--; break; }
+                    sequence += text[j];
+                }
+                fastaSequences.add(new ProteinFastaSequence(comment, sequence));
+            } else if (!text[i].isEmpty()){
+                String sequence = "";
+                for (int j = i; j < text.length; j++, i = j) {
+                    if (text[j].startsWith(">") || text[j].isEmpty())
+                    { i--; break; }
+                    sequence += text[j];
+                }
+                fastaSequences.add(new ProteinFastaSequence(null, sequence));
             }
         }
-        
-        if (fastaSequences.get(fastaSequences.size() - 1).startsWith(">")) {
-            return false;
-        }
-        this.sequences = fastaSequences;
         return true;
     }
     

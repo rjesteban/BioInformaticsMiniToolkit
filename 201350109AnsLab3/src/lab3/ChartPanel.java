@@ -5,17 +5,20 @@
  */
 package lab3;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import static org.knowm.xchart.BitmapEncoder.getBufferedImage;
 import org.knowm.xchart.XChartPanel;
@@ -29,11 +32,23 @@ public class ChartPanel {
     private XYChart chart;
     private JPanel panel;
     private JButton saveAsPng;
+    protected ArrayList<Integer> starts;
+    protected ArrayList<Integer> ends;
     // private JButton backButton;
+    
+    public ChartPanel(String exception) {
+        panel = new JPanel();
+        this.panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(Color.GREEN);
+        panel.add(new JLabel(exception));
+        
+    }
     
     public ChartPanel(XYChart chart) {
         this.chart = chart;
         initComponents();
+        starts = new ArrayList<>();
+        ends = new ArrayList<>();
     }
     
     private void initComponents() {
