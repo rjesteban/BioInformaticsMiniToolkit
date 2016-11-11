@@ -35,14 +35,16 @@ public class ChartPanel {
     protected ArrayList<Integer> starts;
     protected ArrayList<Integer> ends;
     protected String id;
+    protected String exception;
     // private JButton backButton;
+    
     
     public ChartPanel(String exception) {
         panel = new JPanel();
         this.panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.GREEN);
         panel.add(new JLabel(exception));
-        
+        this.exception = exception;
     }
     
     public ChartPanel(XYChart chart) {
@@ -50,6 +52,7 @@ public class ChartPanel {
         initComponents();
         starts = new ArrayList<>();
         ends = new ArrayList<>();
+        exception = "";
     }
     
     public ChartPanel(XYChart chart, ArrayList<Integer> starts, 
