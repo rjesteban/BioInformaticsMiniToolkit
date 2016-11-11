@@ -54,13 +54,15 @@ public class ChartGenerator {
         
         for (ChartPanel chart: charts) {
             panel.add(chart.getPanel());
-            
-            output += String.format("%s\t%d", chart.id, chart.starts.size());
-            for (int i = 0; i < chart.starts.size(); i++) {
-                output += String.format("\t%08d-%08d", chart.starts.get(i),
-                        chart.ends.get(i));
+            if (chart.exception == null || chart.exception.isEmpty()) {
+                output += String.format("%s\t%d", chart.id, chart.starts.size());
+                for (int i = 0; i < chart.starts.size(); i++)
+                    output += String.format("\t%08d-%08d", chart.starts.get(i),
+                            chart.ends.get(i));
+                output+= "\r\n";
+            } else {
+                output += chart.exception + "\r\n";
             }
-            output+= "\r\n";
         }
         
         generateReportButton.addActionListener(new ActionListener() {

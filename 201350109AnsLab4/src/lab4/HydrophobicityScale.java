@@ -80,24 +80,28 @@ public class HydrophobicityScale {
         return hydrophobicity;
     }
 
-    public void generatePlot(int sni, int sw, double threshold, 
+   public void generatePlot(int sni, int sw, double threshold, 
             ArrayList<ProteinFastaSequence> fastaInput) {
         ArrayList<ChartPanel> cplist = new ArrayList<>();
        
         for (ProteinFastaSequence prot : fastaInput) {
             ArrayList<Integer> starts = new ArrayList<>(0);
             ArrayList<Integer> ends = new ArrayList<>(0);
-            if (sw > prot.sequence.length()) {
-                cplist.add(new ChartPanel(prot.comment + " output:"
+            if (prot.comment == null) {
+                cplist.add(new ChartPanel("\toutput:"
+                        + "Input is not in FASTA FORMAT"));
+            }
+            else if (prot.comment !=null && prot.sequence.isEmpty()) {
+                cplist.add(new ChartPanel(prot.getID() + "\toutput:"
+                        + "Input is not in FASTA FORMAT"));
+            }
+            else if (sw > prot.sequence.length()) {
+                cplist.add(new ChartPanel(prot.getID() + "\toutput:"
                         + " Sequence length < Sliding Window Length"));
             } 
             else if (!prot.isProtein()) {
-                cplist.add(new ChartPanel(prot.comment + " output:"
+                cplist.add(new ChartPanel(prot.getID() + "\toutput:"
                         + "Input is not protein"));
-            }
-            else if (prot.comment == null) {
-                cplist.add(new ChartPanel("output:"
-                        + "Input is not in FASTA FORMAT"));
             }
             else {
                 XYChart chart = new XYChartBuilder().width(700).height(700).

@@ -321,33 +321,29 @@ public class AnsLab4JPanel extends javax.swing.JPanel {
         String[] text = this.inputFastaArea.getText().split("\n");
         if (text.length <= 1 || !text[0].startsWith(">") || text[0].isEmpty())
             return false;
-        if (text[text.length - 1].startsWith(">")) return false;
         
-        for (int i = 1; i < text.length; i++)
-            if ((text[i].startsWith(">") && text[i - 1].startsWith(">")) || 
-                (text[i - 1].startsWith(">") && text[i].isEmpty()))
-                    return false;
-        
-        this.fastaSequences = new ArrayList<>();
-        for (int i = 0; i < text.length; i++) {
+        fastaSequences = new ArrayList<>();
+        for (int i = 0; i < text.length;) {
             if (text[i].startsWith(">")) {
                 String comment = text[i].substring(1);
                 String sequence = "";
                 for (int j = i + 1; j < text.length; j++, i = j) {
-                    if (text[j].startsWith(">") || text[j].isEmpty())
-                    { i--; break; }
+                    if (text[j].isEmpty() || text[j].startsWith(">")) break;
                     sequence += text[j];
                 }
                 fastaSequences.add(new ProteinFastaSequence(comment, sequence));
-            } else if (!text[i].isEmpty()){
+                if (sequence.isEmpty()) i++;
+            } else if (!text[i].isEmpty()) {
+                String comment = null;
                 String sequence = "";
                 for (int j = i; j < text.length; j++, i = j) {
-                    if (text[j].startsWith(">") || text[j].isEmpty())
-                    { i--; break; }
+                    if (text[j].isEmpty() || text[j].startsWith(">")) break;
                     sequence += text[j];
                 }
-                fastaSequences.add(new ProteinFastaSequence(null, sequence));
+                fastaSequences.add(new ProteinFastaSequence(comment, sequence));
+                if (sequence.isEmpty()) i++;
             }
+            else i++;
         }
         return true;
     }
