@@ -319,7 +319,7 @@ public class AnsLab4JPanel extends javax.swing.JPanel {
     
     private boolean isFastaInput () {
         String[] text = this.inputFastaArea.getText().split("\n");
-        if (text.length <= 1 || !text[0].startsWith(">") || text[0].isEmpty())
+        if (text.length <= 1 /*|| !text[0].startsWith(">") */ || text[0].isEmpty())
             return false;
         
         fastaSequences = new ArrayList<>();
